@@ -14,5 +14,4 @@ Contents
 
 .. toctree::
 
-   usage
-   api
+   термины
