@@ -5,4 +5,4 @@
 
 ::
 
-    yay -S tilix telegram-desktop visual-studio-code-bin filezilla sublime-text-dev asbru-cm winbox winbox3 termshark wireshark-qt remmina nomachine freerdp flameshot ttf-ms-fonts gnome-keyring 
+    yay -S tilix telegram-desktop visual-studio-code-bin filezilla sublime-text-dev asbru-cm winbox winbox3 termshark wireshark-qt remmina nomachine freerdp flameshot ttf-ms-fonts gnome-keyring gnome-disk-utility mc
