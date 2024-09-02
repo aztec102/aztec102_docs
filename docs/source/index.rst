@@ -15,3 +15,4 @@ Contents
 .. toctree::
 
    термины
+   linux_pc
