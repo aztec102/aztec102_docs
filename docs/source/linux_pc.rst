@@ -1,8 +1,19 @@
 Сборка ОС для работы
 ====================
 
-Для работы использую следующее ПО, поэтому ставлю его сразу после установки Arch:
+Немного истории:
+
+Как и все люди познающие мир свободного и быстрого ПО я начинал с Ubuntu - это классическая Ubuntu, Kubuntu, Xubuntu. Сервера которые мне приходилось обслуживать были на FreeBSD, поэтому пришлось познавать мир портов и пакетов, rc.conf и т.д.
+Мой товарищ успешно сидел на Gentoo, другой же использовал в качестве рабочей машины OpenSUSE.
+Второй товарищ в какой-то момент победил, я поставил себе OpenSUSE Tumbleweed, просидев на ней почти год с небольшим - мне показали Arch.
+Как говорит другой мой товарищ - что Arch для любителей клуба 18+ (с постоянными рыганиями, проблемами и прочим).
+Какое-то время я даже просидел там использовал в качестве среды рабочего стола тот же KDE, потом стал посматривать на китайский Deepin.
+Ну Deepin конечно мое почтение - самая красивая среда рабочего стола и пожалуй одна из моих любимых.
+После года и очередных траблов которые выбивали всю системы и проблемы с системой не поддавались гуглежу, начал искать дистрибутив который основан на Arch, но при этом достаточно легко устанавливается.
+В период с 2021 по текущий день успешно использую - EndeavourOS и рекомендую его остальным инженерам.
+
+Для работы использую следующее ПО, поэтому ставлю его сразу после установки EndeavourOS:
 
 ::
 
-    yay -S tilix telegram-desktop visual-studio-code-bin filezilla sublime-text-dev asbru-cm winbox winbox3 termshark wireshark-qt remmina nomachine freerdp flameshot ttf-ms-fonts gnome-keyring gnome-disk-utility mc
+    yay -S tilix telegram-desktop visual-studio-code-bin filezilla sublime-text-dev asbru-cm winbox3 termshark wireshark-qt remmina nomachine freerdp flameshot ttf-ms-fonts gnome-keyring gnome-disk-utility mc
