@@ -221,3 +221,45 @@ VRRP:
      vrrp vrid 1 priority 120
      vrrp vrid 1 preempt-mode timer delay 20
      vrrp recover-delay 20
+
+Коммутаторы CloudEngine некоторые тоже имеют VRP8, данный кейс был описан используя коммутаторы Huawei CE8861-4C-EI.
+Покажу процесс сборки M-LAG:
+
+::
+    # Создаем VPN-instance
+    ip vpn-instance management
+     ipv4-family
+     description OoBM
+    quit
+    # Настраиваем MGMT-интерфейс для подключения
+    interface MEth0/0/0
+     description << OoBM >>
+     ip binding vpn-instance management
+     ip address 10.10.255.1 255.255.255.0
+    quit
+    # Создаем статический маршрут для полного доступа к сети управления
+    ip route-static vpn-instance management 10.10.192.0 255.255.192.0 10.10.255.254
+
+    # M-LAG
+    stp bridge-address 0001-0001-0001
+    stp mode rstp
+    stp v-stp enable
+    # Со стороны коммутатор master указывается priority, по умолчанию 100
+    dfs-group 1
+     source ip 10.10.255.1 vpn-instance management peer 10.10.255.2
+     priority 200
+    quit
+    # Собираем peer-link
+    interface Eth-Trunk1
+     trunkport 100GE 1/3/8
+     trunkport 100GE 1/4/8
+     mode lacp-static
+     peer-link 1
+
+    # Подключение устройства в рамках M-LAG
+    interface Eth-Trunk2
+     port link-type trunk
+     port trunk allow-pass vlan 5
+     stp bpdu-filter enable
+     mode lacp-static
+     dfs-group 1 m-lag 2
