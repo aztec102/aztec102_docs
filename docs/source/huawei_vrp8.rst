@@ -226,6 +226,7 @@ VRRP:
 Покажу процесс сборки M-LAG:
 
 ::
+    
     # Создаем VPN-instance
     ip vpn-instance management
      ipv4-family
