@@ -179,3 +179,45 @@ Huawei VRP8
       refuse
      endif
      end-filter
+    
+
+QinQ-терминация интерфейсов:
+
+::
+
+    # Router A
+    interface Eth-Trunk51.99999999
+     ip address 10.119.0.1 255.255.255.252
+     encapsulation qinq-termination rt-protocol
+     qinq termination pe-vid 272 ce-vid 100
+     arp broadcast enable
+
+    # Router B
+    interface Eth-Trunk51.99999999
+     ip address 10.119.0.2 255.255.255.252
+     encapsulation qinq-termination rt-protocol
+     qinq termination pe-vid 272 ce-vid 100
+     arp broadcast enable
+
+VRRP:
+
+::
+
+    # Router A
+    interface Eth-Trunk51.597
+     vlan-type dot1q 597
+     mtu 9198
+     ip address 10.119.0.1 255.255.255.248
+     statistic enable
+     vrrp vrid 1 virtual-ip 10.119.0.6
+
+    # Router B - master
+    interface Eth-Trunk51.597
+     vlan-type dot1q 597
+     mtu 9198
+     ip address 10.119.0.2 255.255.255.248
+     statistic enable
+     vrrp vrid 1 virtual-ip 10.119.0.6
+     vrrp vrid 1 priority 120
+     vrrp vrid 1 preempt-mode timer delay 20
+     vrrp recover-delay 20
