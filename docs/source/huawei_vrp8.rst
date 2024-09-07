@@ -80,7 +80,7 @@ Huawei VRP8
 
     # Теперь переходим к IN FV политике
     xpl route-filter RP-UPSTR-RETN-IN
-     ! -- Upstream RETN AS9049 inbound --
+     ! -- Upstream RETN AS9002 inbound --
      ! Prefix classification community
      apply community {9000:1001} additive
      if ip route-destination in PL-IPV4-BOGON then
@@ -107,6 +107,58 @@ Huawei VRP8
      endif
      end-filter
     
+    # Общий роут фильтр которые выполняет если есть общее UPSTREAM-community
+    xpl route-filter RP-UPSTR-OUT-COMMUNITY
+     ! -- Upstream outbound community policy --
+     ! AS prepend control communities
+     if community matches-any {9000:1990} then
+      refuse
+     elseif community matches-any {9000:1991} then
+      apply as-path 9000 1 additive
+      approve
+     elseif community matches-any {9000:1992} then
+      apply as-path 9000 2 additive
+      approve
+     elseif community matches-any {9000:1994} then
+      apply as-path 9000 4 additive
+      approve
+     elseif community matches-any {9000:1996} then
+      apply as-path 9000 6 additive
+      approve
+     else
+      approve
+     endif
+     end-filter
+
+    # Сформируем персональный RF для конкретного FV-аплинка и реакции на BGP Community в сторону него.
+    xpl route-filter RP-UPSTR-RETN-OUT-COMMUNITY
+     ! -- Upstream RETN outbound community policy --
+     call route-filter RP-UPSTR-OUT-COMMUNITY
+     ! AS prepend control communities
+     if community matches-any {9000:1010} then
+      refuse
+     elseif community matches-any {9000:1011} then
+      apply as-path 9000 1 additive
+      approve
+     elseif community matches-any {9000:1012} then
+      apply as-path 9000 2 additive
+      approve
+     elseif community matches-any {9000:1013} then
+      apply as-path 9000 3 additive
+      approve
+     elseif community matches-any {9000:1014} then
+      apply as-path 9000 4 additive
+      approve
+     elseif community matches-any {9000:1015} then
+      apply as-path 9000 5 additive
+      approve
+     elseif community matches-any {9000:1016} then
+      apply as-path 9000 6 additive
+      approve
+     else
+      approve
+     endif
+     end-filter
 
     # Теперь сама политика OUT FV
     xpl route-filter RP-UPSTR-RETN-OUT
