@@ -5,6 +5,8 @@
 
 **BOGONS** - не маршрутизируемые `адреса <https://www.securitylab.ru/blog/personal/aodugin/305208.php>`_ в глобальной сети интернет.
 
+**ASP BOGONS** - приватные и только `AS <https://bgpfilterguide.nlnog.net/guides/bogon_asns/#huawei-vrp>`_ которые не должны приниматься.
+
 **BGP FV** - BGP Full View, когда маршрутизатор отправляет тебе весь пирог из префиксов IPv4, со временем стал очень ресурсоемким для маршрутизаторов.
 
 **BGP DR** - кто-то мог подумать, что это аббревиатура из OSPF, но нет — это Default Route.
