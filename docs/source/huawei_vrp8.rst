@@ -7,6 +7,8 @@ Huawei VRP8
 #. Commit/Rollback
 #. Если это маршрутизатор то конечно же - XPL
 
+Отдельная благодарность `первому <https://icebale.readthedocs.io/en/latest/>`_ и `второму <https://xh4l3.readthedocs.io/ru/latest/>`_ автору полезных документаций.
+
 Подключение по протоколу BGP используя возможности XPL:
 
 ::
@@ -226,7 +228,7 @@ VRRP:
 Покажу процесс сборки M-LAG:
 
 ::
-    
+
     # Создаем VPN-instance
     ip vpn-instance management
      ipv4-family
