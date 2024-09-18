@@ -17,3 +17,4 @@ Contents
    термины
    linux_pc
    huawei_vrp8
+   nexus_to_vrp
