@@ -181,7 +181,85 @@ Huawei VRP8
       refuse
      endif
      end-filter
+
+
+XPL and IPV6:
+
+::
+
+    xpl ipv6-prefix-list PL-IPV6-BOGON
+     :: 8 le 128,
+     100:: 64 le 128,
+     2001:2:: 48 le 128,
+     2001:10:: 28 le 128,
+     2001:db8:: 32 le 128,
+     3fff:: 20 le 128,
+     2002:: 16 le 128,
+     3ffe:: 16 le 128,
+     5f00:: 16 le 128,
+     fc00:: 7 le 128,
+     fe80:: 10 le 128,
+     fec0:: 10 le 128,
+     ff00:: 8 le 128
+     end-list
+
+    xpl ipv6-prefix-list PL-IPV6-LONG
+     :: 0 ge 49 le 128
+     end-list
+
+    # Теперь переходим к IN FV политике
+    xpl route-filter RP-UPSTR-RETN-IPV6-IN
+     ! -- Upstream RETN AS9002 inbound --
+     ! Prefix classification community
+     apply community {9000:1001} additive
+     if ipv6 route-destination in PL-IPV6-BOGON then
+      ! Do not accept bogons
+      refuse
+     elseif ipv6 route-destination in PL-IPV6-LONG then
+      ! Do not accept longer 25 to 32
+      refuse
+     elseif as-path in ASP-BOGONS then
+      ! Do not accept AS BOGONS
+      refuse
+     elseif as-path in ASP-UPSTR-RETN-HIGH then
+      ! More preffered AS
+      apply local-preference 120
+      approve
+     elseif as-path in ASP-UPSTR-RETN-LOW then
+      ! Less preffered AS
+      apply local-preference 90
+      approve
+     else
+      ! Everything else
+      apply local-preference 110
+      approve
+     endif
+     end-filter
+
+    xpl ipv6-prefix-list PL-ADV-AS9000-IPV6
+     ! -- All IPV6 AS9000 prefixes --
+     2403:2e80:: 32
+     end-list
     
+    # Теперь сама политика OUT FV
+    xpl route-filter RP-UPSTR-RETN-IPV6-OUT
+     ! -- Upstream RETN AS9002 outbound --
+     if ip route-destination in PL-IPV4-BLACKHOLE or community matches-any {9000:666} then
+      ! Tell uplink to blackhole some prefixes
+      apply community {9002:666} additive
+     elseif ipv6 route-destination in PL-IPV6-BOGON then
+      ! Do not advertise bogons
+      refuse
+     elseif as-path in ASP-AS9000 and ipv6 route-destination in PL-ADV-AS9000-IPV6 then
+      approve
+     elseif as-path in ASP-AS9000-CLIENTS then
+      apply as-path 9000 1 additive
+      approve
+     else
+     ! Drop everything else
+      refuse
+     endif
+     end-filter
 
 QinQ-терминация интерфейсов:
 
