@@ -18,3 +18,4 @@ Contents
    linux_pc
    huawei_vrp8
    nexus_to_vrp
+   radius_to_tacacs
