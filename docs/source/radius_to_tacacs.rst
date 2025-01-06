@@ -112,6 +112,7 @@
 Рассмотрим высокий уровень привелегий и ограничения команд к выполнению
 
 ::
+    
     group = senior {
       default service = permit
       service = shell {
@@ -134,6 +135,7 @@
 Рассмотрим пример создания сервисной учетной записи, которой разрешены только определенные команды
 
 ::
+
     group = service {
       default service = permit
       service = shell {
@@ -160,6 +162,7 @@
 Huawei CE VRP8
 
 ::
+
     hwtacacs server template tacacs-oob
      hwtacacs server authentication 10.226.255.229 vpn-instance management
      hwtacacs server authentication 10.226.255.230 vpn-instance management secondary
