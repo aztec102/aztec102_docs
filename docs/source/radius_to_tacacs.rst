@@ -112,7 +112,7 @@
 Рассмотрим высокий уровень привелегий и ограничения команд к выполнению
 
 ::
-    
+
     group = senior {
       default service = permit
       service = shell {
@@ -191,3 +191,139 @@ Huawei CE VRP8
       recording-mode hwtacacs tacacs-oob
      #
      cmd recording-scheme tacacs-oob
+
+Huawei S VRP2
+
+::
+
+    hwtacacs-server template tacacs-oob
+     hwtacacs-server authentication 10.226.255.229 vpn-instance management
+     hwtacacs-server authentication 10.226.255.230 vpn-instance management secondary
+     hwtacacs-server authorization 10.226.255.229 vpn-instance management
+     hwtacacs-server authorization 10.226.255.230 vpn-instance management secondary
+     hwtacacs-server accounting 10.226.255.229 vpn-instance management
+     hwtacacs-server accounting 10.226.255.230 vpn-instance management secondary
+     hwtacacs-server source-ip 10.226.255.232
+     hwtacacs-server shared-key cipher keystring
+     hwtacacs-server timer response-timeout 10
+     undo hwtacacs-server user-name domain-included
+    
+    aaa
+     authentication-scheme default
+      authentication-mode local hwtacacs
+     authentication-scheme tacacs-oob
+      authentication-mode local hwtacacs
+     authorization-scheme tacacs-oob
+      authorization-mode local hwtacacs
+      authorization-cmd 3 hwtacacs local
+      authorization-cmd 5 hwtacacs local
+      authorization-cmd 7 hwtacacs local
+      authorization-cmd 10 hwtacacs local
+      authorization-cmd 15 hwtacacs local
+     accounting-scheme tacacs-oob
+      accounting-mode hwtacacs
+      accounting start-fail online
+     recording-scheme tacacs-oob
+      recording-mode hwtacacs tacacs-oob
+     cmd recording-scheme tacacs-oob
+     domain default_admin
+      authentication-scheme tacacs-oob
+      accounting-scheme tacacs-oob
+      authorization-scheme tacacs-oob
+      hwtacacs-server tacacs-oob
+
+Huawei NE VRP8
+
+::
+    
+    hwtacacs-server template tacacs-oob
+     hwtacacs-server authentication 10.226.255.229 vpn-instance management
+     hwtacacs-server authentication 10.226.255.230 vpn-instance management secondary
+     hwtacacs-server authorization 10.226.255.229 vpn-instance management
+     hwtacacs-server authorization 10.226.255.230 vpn-instance management secondary
+     hwtacacs-server accounting 10.226.255.229 vpn-instance management
+     hwtacacs-server accounting 10.226.255.230 vpn-instance management secondary
+     hwtacacs-server shared-key cipher keystring
+     hwtacacs-server user-name original
+    quit
+
+    aaa
+     authentication-scheme default
+      authentication-mode local hwtacacs
+     authorization-scheme tacacs-oob
+      authorization-mode local hwtacacs
+      authorization-cmd 5 hwtacacs local
+      authorization-cmd 10 hwtacacs local
+      authorization-cmd 15 hwtacacs local
+     accounting-scheme default
+      accounting-mode hwtacacs
+      accounting start-fail online
+     domain default_admin
+      authorization-scheme tacacs-oob
+      accounting-scheme default
+      hwtacacs-server tacacs-oob
+     recording-scheme tacacs-oob
+      recording-mode hwtacacs tacacs-oob
+     #
+     cmd recording-scheme tacacs-oob
+
+Cisco IOS
+
+::
+
+    tacacs server tacacs1-krk
+     address ipv4 1.1.1.1
+     key 7 keystring
+     timeout 3
+    tacacs server tacacs2-krk
+     address ipv4 1.1.1.2
+     key 7 keystring
+     timeout 3
+
+    aaa group server tacacs+ TACACS-GLOBAL
+     server name tacacs1-krk
+     server name tacacs2-krk
+     ip tacacs source-interface Loopback0
+    
+    aaa authentication login default local group TACACS-GLOBAL
+    aaa authentication enable default group TACACS-GLOBAL
+    aaa authorization console
+    aaa authorization exec default local group TACACS-GLOBAL if-authenticated 
+    aaa authorization commands 3 default local group TACACS-GLOBAL 
+    aaa authorization commands 5 default local group TACACS-GLOBAL 
+    aaa authorization commands 7 default local group TACACS-GLOBAL 
+    aaa authorization commands 10 default local group TACACS-GLOBAL 
+    aaa authorization commands 15 default local group TACACS-GLOBAL 
+    aaa accounting update newinfo
+    aaa accounting commands 3 default start-stop group TACACS-GLOBAL
+    aaa accounting commands 5 default start-stop group TACACS-GLOBAL
+    aaa accounting commands 7 default start-stop group TACACS-GLOBAL
+    aaa accounting commands 10 default start-stop group TACACS-GLOBAL
+    aaa accounting commands 15 default start-stop group TACACS-GLOBAL
+
+Cisco IOS - old version software
+
+::
+
+    tacacs-server host 1.1.1.1 key 7 keystring
+    tacacs-server host 1.1.1.2 key 7 keystring
+    
+    aaa group server tacacs+ TACACS-GLOBAL
+     server 1.1.1.1
+     server 1.1.1.2
+     ip tacacs source-interface Loopback0
+
+    aaa authentication login default local group TACACS-GLOBAL
+    aaa authentication enable default enable group TACACS-GLOBAL
+    aaa authorization console
+    aaa authorization exec default local group TACACS-GLOBAL if-authenticated 
+    aaa authorization commands 3 default local group TACACS-GLOBAL 
+    aaa authorization commands 5 default local group TACACS-GLOBAL 
+    aaa authorization commands 7 default local group TACACS-GLOBAL 
+    aaa authorization commands 10 default local group TACACS-GLOBAL 
+    aaa authorization commands 15 default local group TACACS-GLOBAL 
+    aaa accounting commands 3 default start-stop group TACACS-GLOBAL
+    aaa accounting commands 5 default start-stop group TACACS-GLOBAL
+    aaa accounting commands 7 default start-stop group TACACS-GLOBAL
+    aaa accounting commands 10 default start-stop group TACACS-GLOBAL
+    aaa accounting commands 15 default start-stop group TACACS-GLOBAL
