@@ -327,3 +327,23 @@ Cisco IOS - old version software
     aaa accounting commands 7 default start-stop group TACACS-GLOBAL
     aaa accounting commands 10 default start-stop group TACACS-GLOBAL
     aaa accounting commands 15 default start-stop group TACACS-GLOBAL
+
+D-Link - universal DES-series
+
+::
+
+    create authen server_host 10.226.255.229 protocol tacacs+ port 49 key "keystring" timeout 5 retransmit 1
+    create authen server_host 10.226.255.230 protocol tacacs+ port 49 key "keystring" timeout 5 retransmit 1
+    config authen server_group tacacs+ delete server_host 10.226.255.229 protocol tacacs+
+    config authen server_group tacacs+ add server_host 10.226.255.229 protocol tacacs+
+    config authen server_group tacacs+ delete server_host 10.226.255.230 protocol tacacs+
+    config authen server_group tacacs+ add server_host 10.226.255.230 protocol tacacs+
+    config authen_login default method tacacs+ local
+    config authen_enable default method local_enable
+    config authen application telnet login default
+    config authen application telnet enable default
+    config authen application ssh login default
+    config authen application ssh enable default
+    config authen parameter response_timeout 30
+    config authen parameter attempt 3
+    enable authen_policy
