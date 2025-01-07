@@ -348,5 +348,5 @@ D-Link - universal DES-series
     config authen parameter attempt 3
     enable authen_policy
 
-.. image:: /images/luck.jgp
+.. image:: images/luck.jgp
     :width: 600
