@@ -2,12 +2,12 @@
 
 # -- Project information
 
-project = 'Aztec102 Docs'
-copyright = '2024, aztec102'
+project = 'aztec102 Docs'
+copyright = '2025, aztec102'
 author = 'Konstantin Mikholap'
 
-release = '0.1'
-version = '0.1.0'
+release = '0.2'
+version = '0.2.0'
 
 # -- General configuration
 
