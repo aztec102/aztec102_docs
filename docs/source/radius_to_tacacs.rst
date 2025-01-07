@@ -348,5 +348,18 @@ D-Link - universal DES-series
     config authen parameter attempt 3
     enable authen_policy
 
+###################################
+Шаг 6: Централизованное логирование
+###################################
+
+::
+
+    TO DO
+
+
+#################
+80% это уже успех
+#################
+
 .. image:: images/luck.jpg
-    :width: 600
+    :width: 850
