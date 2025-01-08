@@ -354,12 +354,28 @@ D-Link - universal DES-series
 
 ::
 
-    TO DO
+    authentication log = /var/log/tac_plus/authc/%Y/%m/%d.log
+    authentication log = 10.10.10.254:514
+    authorization log = /var/log/tac_plus/authz/%Y/%m/%d.log
+    authorization log = 10.10.10.254:514
+    accounting log = /var/log/tac_plus/acct/%Y/%m/%d.log
+    accounting log = 10.10.10.254:514
+
+    # OR
+    log = mylog {
+        destination = 169.254.0.23:514
+    }
+    authentication log = /var/log/tac_plus/authc/%Y/%m/%d.log
+    authentication log = mylog
+    authorization log = /var/log/tac_plus/authz/%Y/%m/%d.log
+    authorization log = mylog
+    accounting log = /var/log/tac_plus/acct/%Y/%m/%d.log
+    accounting log = mylog
 
 
-#################
-80% это уже успех
-#################
+########################
+Успех достигнут, балдеем
+########################
 
 .. image:: images/luck.jpg
     :width: 850
