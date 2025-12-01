@@ -268,6 +268,7 @@ XPL and IPV6:
 Клиенские политики XPL:
 
 ::
+    
     xpl route-filter RP-CLNT-IN-COMMUNITY
      ! -- Client inbound community policy --
      ! Prefix classification community
