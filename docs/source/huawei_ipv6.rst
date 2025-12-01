@@ -2,6 +2,7 @@ Huawei IPv6
 ===========
 
 Была хотелка протестить IPv6 на сети оператора, как обычный + так и PD
+
 Схема - два сервера DHCPv6 (Kea DHCP) в кластере, общение происходит по схеме - dhcp relay
 
 Тестируем IPv6 на свитче CloudEngine S6730-H:
@@ -47,6 +48,10 @@ Huawei IPv6
 Тестируем IPv6 на роутере NetEngine 8000:
 
 ::
+
+    dhcpv6 relay server group OSA_TEST
+     server 2A05:7400:3:406::1
+     server 2A05:7400:3:406::2
 
     interface Eth-Trunk51.237
      vlan-type dot1q 237
