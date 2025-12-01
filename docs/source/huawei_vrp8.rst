@@ -163,6 +163,8 @@ Huawei VRP8
      end-filter
 
     # Теперь сама политика OUT FV
+    # После некоторых разбирательств было обнаружено чтобы политика на OUT можем пропускать маршруты из IX
+    # Поэтому добавим проверку для клиенты чтобы анонсировать маршруты полученные от клиентов с определенными BGP Community
     xpl route-filter RP-UPSTR-RETN-OUT
      ! -- Upstream RETN AS9002 outbound --
      if ip route-destination in PL-IPV4-BLACKHOLE or community matches-any {9000:666} then
@@ -173,7 +175,7 @@ Huawei VRP8
       refuse
      elseif as-path in ASP-AS9000 and ip route-destination in PL-ADV-AS9000 then
       approve
-     elseif as-path in ASP-AS9000-CLIENTS then
+     elseif as-path in ASP-AS9000-CLIENTS and community matches-any {9000:5000} then
       apply as-path 9000 1 additive
       approve
      else
@@ -242,6 +244,8 @@ XPL and IPV6:
      end-list
     
     # Теперь сама политика OUT FV
+    # После некоторых разбирательств было обнаружено чтобы политика на OUT можем пропускать маршруты из IX
+    # Поэтому добавим проверку для клиенты чтобы анонсировать маршруты полученные от клиентов с определенными BGP Community
     xpl route-filter RP-UPSTR-RETN-IPV6-OUT
      ! -- Upstream RETN AS9002 outbound --
      if ip route-destination in PL-IPV4-BLACKHOLE or community matches-any {9000:666} then
@@ -252,7 +256,7 @@ XPL and IPV6:
       refuse
      elseif as-path in ASP-AS9000 and ipv6 route-destination in PL-ADV-AS9000-IPV6 then
       approve
-     elseif as-path in ASP-AS9000-CLIENTS then
+     elseif as-path in ASP-AS9000-CLIENTS and community matches-any {9000:5000} then
       apply as-path 9000 1 additive
       approve
      else
@@ -260,6 +264,84 @@ XPL and IPV6:
       refuse
      endif
      end-filter
+
+Клиенские политики XPL:
+
+::
+    xpl route-filter RP-CLNT-IN-COMMUNITY
+     ! -- Client inbound community policy --
+     ! Prefix classification community
+     apply community {9000:5000} additive
+    end-filter
+    
+    # Общий XPL для клиентов который работает на IN политике
+    xpl route-filter RP-CLNT-IN
+     ! -- Default client inbound policy --
+      if community matches-any {9000:666} and ip route-destination in PL-IPV4-ONLY-HOST then
+       ! Blackhole prefix
+       apply ip next-hop blackhole
+       approve
+     elseif ip route-destination in {0.0.0.0 0} or ip route-destination in PL-IPV4-BOGON then
+      ! Do not accept bogons
+      refuse
+     elseif ip route-destination in PL-IPV4-LONG then
+      ! Do not accept longer 25 to 32
+      refuse
+     else
+      ! Set default client locpref
+      apply local-preference 114
+      approve
+     endif
+     ! Generic policy for all clients
+     call route-filter RP-CLNT-IN-COMMUNITY
+    end-filter
+
+    # Персональный XPL который уже должен висеть на клиенте
+    # Прошу отметить здесь нет персонального ip-prefix-list для того чтобы скорректировать принимаемые анонсы от клиента, данная политика топорная - но рабочая.
+    # IPL - должен генерировать каким-нибудь python-скриптом и обновлять IPL раз в сутки примерно, лучше чаще.
+    xpl route-filter RP-CLNT-AS9001-IN
+     ! -- Client AS9001 inbound --
+     ! Prefix classification community
+     apply community {9000:5001} additive
+     if as-path in ASP-AS9001 then
+      ! Accept only AS9001 prefixes
+      call route-filter RP-CLNT-IN
+     else
+      ! Everything else
+      refuse
+     endif
+    end-filter
+
+    # Клиентский XPL для отдачи DR + свои сети + клиенты
+    xpl route-filter RP-CLNT-DR-OUT
+     ! -- Default client outbound policy --
+     if ip route-destination in PL-IPV4-BOGON then
+      ! Do not advertise bogons
+      refuse
+     elseif as-path in ASP-AS9000 and ip route-destination in PL-ADV-AS9000 then
+      approve
+     elseif as-path in ASP-AS9000-CLIENTS and community matches-any {9000:5000} then
+      approve
+     else
+      ! Drop everything else
+      refuse
+     endif
+    end-filter
+
+    # Клиентский XPL для отдачи клиенту BGP Full view
+    xpl route-filter RP-CLNT-FV-OUT
+     ! -- Default client outbound policy --
+     if ip route-destination in PL-IPV4-BOGON then
+      ! Do not advertise bogons
+      refuse
+     elseif ip route-destination in PL-IPV4-LONG then
+      ! Do not accept longer 25 to 32
+      refuse
+     else
+      ! Pass everything else
+      approve
+     endif
+    end-filter
 
 QinQ-терминация интерфейсов:
 
