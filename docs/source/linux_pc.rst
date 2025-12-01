@@ -16,4 +16,6 @@
 
 ::
 
-    yay -S tilix telegram-desktop visual-studio-code-bin filezilla sublime-text-dev asbru-cm winbox3 termshark wireshark-qt remmina nomachine freerdp flameshot ttf-ms-fonts gnome-keyring gnome-disk-utility mc
+    yay -S tilix telegram-desktop visual-studio-code-bin filezilla sublime-text-dev asbru-cm remote-desktop-manager winbox3 termshark wireshark-qt remmina nomachine freerdp flameshot ttf-ms-fonts gnome-keyring gnome-disk-utility mc
+
+Asbru-cm - немного поломался в последнее время, поэтому советую использовать RDM (remote-desktop-manager)
