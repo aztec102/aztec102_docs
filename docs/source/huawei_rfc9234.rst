@@ -19,4 +19,5 @@ Huawei RFC9234
 ::
 
     bgp XXXXX
+     ipv4-family unicast
       peer X.X.X.X role 
