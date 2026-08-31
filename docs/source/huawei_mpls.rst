@@ -21,7 +21,7 @@ DC
       vsi-id 111
       peer 10.232.255.111
       peer 10.232.255.112
-      protect-group MNSK
+      protect-group CITY
        protect-mode pw-redundancy master
        reroute delay 300
        peer 10.232.255.111 preference 5
