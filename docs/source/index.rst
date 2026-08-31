@@ -20,3 +20,4 @@ Contents
    nexus_to_vrp
    radius_to_tacacs
    huawei_ipv6
+   huawei_rfc9234
