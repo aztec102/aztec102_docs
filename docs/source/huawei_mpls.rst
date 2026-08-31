@@ -1,9 +1,18 @@
 Huawei MPLS
 ===========
 
+###############
+Топология с IGP
+###############
+
 .. image:: images/huawei_vpls.png
 
+###########################
+LDP прямые без лишних хопов
+###########################
+
 .. image:: images/huawei_vpls_no_igp.png
+
 
 DC
 
