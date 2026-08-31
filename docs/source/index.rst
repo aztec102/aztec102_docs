@@ -21,3 +21,4 @@ Contents
    radius_to_tacacs
    huawei_ipv6
    huawei_rfc9234
+   huawei_mpls
