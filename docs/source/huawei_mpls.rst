@@ -14,9 +14,9 @@ LDP прямые без лишних хопов
 .. image:: images/huawei_vpls_no_igp.png
 
 
-#########################################
-Пример VPLS (точка-точка + active/backup)
-#########################################
+##########################################
+VPLS Martini (точка-точка + active/backup)
+##########################################
 
 DC
 
@@ -73,9 +73,9 @@ BR1/BR2
       l2 binding vsi 111
 
 
-###############################################
-Пример VPLS (точка-точка L2+L3 между железками)
-###############################################
+################################################
+VPLS Martini (точка-точка L2+L3 между железками)
+################################################
 
 Если мы все же хотим натянуть виртуальный шнурок между двумя маршрутизаторами, то нам нужно использовать vsi в режиме bd-mode.
 
@@ -112,3 +112,52 @@ CR1 to BR1
 
     interface Vbdif111
      ip address 10.10.90.91 255.255.255.0
+
+#####
+L3VPN
+#####
+
+BR1
+
+::
+
+
+    ip vpn-instance inet
+     ipv4-family
+      route-distinguisher 200:100
+      vpn-target 200:100 export-extcommunity
+      vpn-target 200:100 import-extcommunity
+
+    bgp 200
+     peer 10.124.255.123 as-number 200
+     ipv4-family unicast
+      peer 10.124.255.123 enable
+     ipv4-family vpnv4
+      policy vpn-target
+      peer 10.124.255.123 enable
+      peer 10.124.255.123 default-originate vpn-instance inet
+
+DC
+
+::
+
+    ip vpn-instance inet
+     ipv4-family
+      route-distinguisher 200:100
+      vpn-target 200:100 export-extcommunity
+      vpn-target 200:100 import-extcommunity
+
+    interface LoopBack1
+     description << TEST >>
+     ip binding vpn-instance inet
+     ip address 10.90.90.90 255.255.255.255
+
+    bgp 200
+     peer 10.124.255.111 as-number 200
+     ipv4-family unicast
+      peer 10.124.255.111 enable
+     ipv4-family vpnv4
+      policy vpn-target
+      peer 10.124.255.111 enable
+     ipv4-family vpn-instance inet
+      import-route direct
